@@ -1,0 +1,202 @@
+<html>
+<head>
+  <title>Cinematographia Options</title>
+
+  <link href="css/cupertino.css" rel="stylesheet" type="text/css">
+  <style>
+	body {
+		font-family:	Arial, Arial, Helvetica, sans-serif;
+		font-size:		12px;
+		width: 66%;
+		min-width: 500px;
+		margin: 0 auto;
+	}
+	h1 {
+		padding: 5px;
+		font-weight: bold;
+		font-size: 14px;
+		background: #ddd;
+	}
+	.selector {
+	 border-top: 1px solid #aaa;
+	 border-bottom: 1px solid #aaa;
+	 margin: 0 auto;
+	}
+	.selector-element {
+	 width: 33%;
+	 float: left;
+	}
+	.selector-element .content {
+	 margin: 10px;
+	 border-right: 1px solid #aaa;
+
+	}
+	.save-button {
+	 text-align: right;
+	 margin-top: 5px;
+	}
+	.save-button button {
+	 font-size: 14px;
+	 padding: 5px;
+	}
+	#saved-message {
+	 margin: 5px 0;
+	 background: #CCFFCC;
+	 padding: 5px;
+	 font-size: 14px;
+	 display: none;
+	}
+	.opacity-selector {
+		text-align: right;
+		padding-right: 20px;
+	}
+	.clr {
+	 clear: both;
+	}
+	.colorButton {
+	 border: 1px solid #aaa !important;
+	 width: 95% !important;
+	 margin-top: 10px !important;
+	}
+  </style>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jquery.colorInput.js"></script>
+	<script type="text/javascript">
+
+  function includes(within, str) {
+    return within.match(str);
+  }
+  function ends_with(within, str) {
+    return within.match(str+'$');
+  }
+	function get_setting(name) {
+		return localStorage["current_"+name] ? localStorage["current_"+name] : localStorage["default_"+name];
+	}
+
+	// Saves options to localStorage.
+	function save_options() {
+
+	  localStorage["current_opacity"]  = parseInt($("#opacity").val()) / 100;
+	  localStorage["current_color"]    = $("#color").val();
+    localStorage["current_shortcut"] = $("#shortcut").val();
+
+	  $("#saved-message").fadeIn("fast");
+	}
+
+	jQuery(function(){
+	  var opacity  = get_setting("opacity");
+	  var color    = get_setting("color");
+    var shortcut = get_setting("shortcut");
+
+	  $("#color").val(color);
+      $("#color").colorInput({acceptCancelButtons : false});
+
+		$("#opacity").val(opacity * 100);
+		$("#opacity_slider").slider({
+			value  : opacity * 100,
+			min    : 10,
+			max    : 100,
+			step   : 10,
+			slide  : function(event, ui){
+				$("#opacity").val(ui.value);
+				$("#opacity_slider_value .value").html(ui.value);
+			}
+		});
+		$("#opacity_slider_value .value").html(opacity * 100);
+
+    var shortcut_field = $("#shortcut");
+		shortcut_field.val(shortcut);
+		shortcut_field.focus(function(){
+		  $(this).val('');
+		  return false;
+		});
+    shortcut_field.blur(function(){
+      if (shortcut_field.val() == '')
+        shortcut_field.val(shortcut)
+    });
+    shortcut_field.keydown(function(event){
+      switch(event.keyCode) {
+        case 27: // escape
+          shortcut_field.blur();
+          return false;
+        case 17: // ctrl
+          if(!includes(shortcut_field.val(), "ctrl\\+"))
+            shortcut_field.val(shortcut_field.val()+"ctrl+");
+          return false;
+        case 16: // shift
+          if(!includes(shortcut_field.val(), "shift\\+"))
+            shortcut_field.val(shortcut_field.val()+"shift+");
+          return false;
+        case 18: // alt
+          if(!includes(shortcut_field.val(), "alt\\+"))
+            shortcut_field.val(shortcut_field.val()+"alt+");
+          return false;
+        case 8: // backspace
+          shortcut_field.val('');
+          return false;
+        default:
+          //alert(ends_with(shortcut_field.val(), "\\+"));
+          if(!ends_with(shortcut_field.val(), "\\+"))
+            return false
+      }
+    });
+
+	});
+
+	</script>
+ </head>
+<body>
+<h1>Cinema Anywhere Options</h1>
+
+<h2 id='saved-message'>Options saved</h2>
+
+<div class='selector'>
+	<div class='selector-element'>
+		<div class='content'>
+			<p>
+				Select Opacity:
+			</p>
+			<div class='opacity-selector'>
+				<div id='opacity_slider_value'>
+					<span class='value'></span>%
+				</div>
+				<div id='opacity_slider'></div>
+				<input type='hidden' id='opacity' />
+			</div>
+		</div>
+	</div>
+<div class='selector-element'>
+		<div class='content'>
+			<p>
+				Select Color:
+			</p>
+			<div class='color-selector'>
+				<input class='color' id='color'>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class='selector-element'>
+		<div class='content'>
+			<p>
+				Shortcut:
+			</p>
+			<div class='shortcut-selector'>
+				<input id='shortcut' type='text'>
+			</div>
+		</div>
+	</div>
+
+<div class='clr'></div>
+</div>
+
+<div class='clr'></div>
+<div class='save-button'>
+	<button onclick="save_options()">Save</button>
+</div>
+</body>
+</html>
+

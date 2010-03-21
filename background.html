@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<script>
+		  function config_value(item) {
+		    return localStorage["current_"+item] ? localStorage["current_"+item] : localStorage["default_"+item];
+		  }
+
+		  function toggleBlinds(tab) {
+			  var opacity = config_value('opacity');
+			  var color   = config_value('color');
+			  chrome.tabs.executeScript(tab.id, {code : "toggleBlinds("+parseFloat(opacity)+", '"+color+"')"});
+		  }
+
+			function init() {
+			  localStorage["default_opacity"]  = "0.8";			  localStorage["default_color"]    = "#000000";
+        localStorage["default_shortcut"] = "ctrl+i"
+
+				chrome.browserAction.onClicked.addListener(function(tab) {
+       	  toggleBlinds(tab);
+				});
+
+        chrome.extension.onRequest.addListener(function(request, sender){
+          if (request.action == "toggleBlinds")
+            toggleBlinds(sender.tab);
+          else if (request.action == "initShortcut")
+            chrome.tabs.executeScript(sender.tab.id, {code : "initBlinds('"+config_value('shortcut')+"')"});
+
+        });
+
+			}
+		</script>
+	</head>
+	<body onload='init()'>
+	</body>
+</html>
+

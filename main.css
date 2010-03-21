@@ -1,0 +1,12 @@
+#_y_blind_cover, ._y_blind_cover {
+	opacity: 0.9;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+#_y_blind_cover {
+ background: none;
+ z-index: 1000;
+}
+
