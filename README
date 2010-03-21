@@ -1,0 +1,15 @@
+Cinematographia - Yet Another Chrome Plugin
+
+Everyone knows the famous "Turn The Lights Off" plugins which give the possibility to focus on a flash video or a game. But, what if we need to focus on common a HTML area? Whole page is greyed out and we can't interact with it.
+
+That's where Cinematographia is helpful. We can draw a rectangle area in which we can use the page and interact with it. The rest of the page remains darker and we can't do anything with it. It can be useful while doing presentations, pointing the actual place of desired site element or while reading an article text surrounded by crazy-pink navigation.
+
+
+Current customizable options:
+ - color (default: black)
+ - opacity (default: 80%)
+ - keyboard shortcut (default: ctrl+i)
+
+ Add plugin for your Chrome at:
+ https://chrome.google.com/extensions/detail/ohampbnlhnadkcioibnobgicpboaljnb
+
